@@ -51,6 +51,7 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 <main class="try-main" id="main"><div class="try-intro">
 <p class="eyebrow">Online evaluation / 在线体验</p>
 <div class="try-title-row"><h1 data-i18n="title">Online evaluation</h1><span class="service-status loading" id="status" data-i18n="checking">Checking service…</span></div>
+<p class="connection-tip" id="connectionTip" data-i18n="connection_tip" role="status" hidden>Tip: In some network environments, a proxy may be needed for a better experience.</p>
 <p class="lead" data-i18n="lead">Upload an image or video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.</p>
 </div>
 <section class="example-picker" aria-labelledby="examples-heading">
@@ -92,7 +93,7 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 <script>
 var I18N={
  en:{nav_home:"Home",nav_benchmarks:"Benchmarks",nav_try:"Online use",
-  title:"Online evaluation", results_h:"Evaluation results", result_empty:"Results will appear here after an evaluation.", running:"Evaluating the current questions…", checking:"connecting to service…",
+  title:"Online evaluation", results_h:"Evaluation results", result_empty:"Results will appear here after an evaluation.", running:"Evaluating the current questions…", checking:"connecting to service…", connection_tip:"Tip: In some network environments, a proxy may be needed for a better experience.",
   lead:"Upload an image or video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.",
   draw_hint:"Drag on an image to draw candidate regions; tick “use regions” on a choice question to make them the answer space. Drawn regions cannot be used together with text options, and inference requires at least two valid regions.",
   examples_h:"Choose an example below for a quick demo", input_h:"Image or video", questions_h:"Questions and options", upload_h:"Upload your own file", upload_note:"Image or video · max 60 MB for video",
@@ -110,7 +111,7 @@ var I18N={
   flat:"flat distribution: the model is saying it does not know",
   tip:"Tip: English questions work best; Chinese usually works too."},
  zh:{nav_home:"首页",nav_benchmarks:"基准测试",nav_try:"在线体验",
-  title:"在线体验", results_h:"评测结果", result_empty:"运行评测后，答案概率和耗时会显示在这里。", running:"正在评测当前问题…", checking:"正在连接服务…",
+  title:"在线体验", results_h:"评测结果", result_empty:"运行评测后，答案概率和耗时会显示在这里。", running:"正在评测当前问题…", checking:"正在连接服务…", connection_tip:"提示：在部分网络环境下可能需要代理以获得更好的体验。",
   lead:"上传图片或视频，设置 choice、score 或 noul 问题后统一提交。页面返回答案概率、服务端耗时和请求往返耗时。",
   draw_hint:"在图上拖动可以框出候选区域；在选择题里勾选“用框作为选项”，这些框就是答案空间。框选区域不可与文本选项同时使用；使用框选区域进行推理时，至少需要两个有效框。",
   examples_h:"从下方选择一个示例，快速体验~", input_h:"图片或视频", questions_h:"问题与选项", upload_h:"上传自己的文件", upload_note:"支持图片、视频 · 视频上限 60 MB",
@@ -143,14 +144,16 @@ function setServiceReady(ready){SERVICE_READY=ready;var file=document.getElement
   file.disabled=!ready;zone.classList.toggle('disabled',!ready);zone.setAttribute('aria-disabled',String(!ready));
   document.querySelectorAll('.presets button').forEach(function(button){button.disabled=!ready;});
   document.getElementById('ask').disabled=!ready;}
+function setConnectionTip(show){document.getElementById('connectionTip').hidden=!show;}
 function status(){var e=document.getElementById('status'),controller=new AbortController(),timeout=setTimeout(function(){controller.abort();},8000);
   setServiceReady(false);
+  setConnectionTip(false);
   if(!e.classList.contains('ready')&&!e.classList.contains('loading')){e.className='service-status loading';e.textContent=T('checking');}
   fetch(apiUrl('/api/status'),{signal:controller.signal}).then(function(r){if(!r.ok)throw new Error('status '+r.status);return r.json();}).then(function(s){clearTimeout(timeout);
-    if(s.error){e.className='service-status error';e.textContent='error: '+String(s.error).slice(0,60);setServiceReady(false);return;}
-    if(s.ready){e.className='service-status ready';e.textContent=T('ready')+(s.queue?(' · '+s.queue+' '+T('queued')):'');setServiceReady(true);}
+    if(s.error){e.className='service-status error';e.textContent='error: '+String(s.error).slice(0,60);setServiceReady(false);setConnectionTip(true);return;}
+    if(s.ready){e.className='service-status ready';e.textContent=T('ready')+(s.queue?(' · '+s.queue+' '+T('queued')):'');setServiceReady(true);setConnectionTip(false);}
     else{e.className='service-status loading';e.textContent=T('loading')+' … '+Math.round(s.loading_s||0)+' s';setServiceReady(false);setTimeout(status,4000);}
-  }).catch(function(){clearTimeout(timeout);e.className='service-status error';e.textContent=LANG==='zh'?'未连接推理服务':'inference server unavailable';setServiceReady(false);});}
+  }).catch(function(){clearTimeout(timeout);e.className='service-status error';e.textContent=LANG==='zh'?'未连接推理服务':'inference server unavailable';setServiceReady(false);setConnectionTip(true);});}
 function renderChips(){
   var box=document.getElementById('presets');box.innerHTML='';box.appendChild(el('span',{'class':'lab'},T('images')));
   PRE.forEach(function(p,i){var b=el('button',null,esc(LANG==='zh'&&p.title_zh?p.title_zh:p.title));b.disabled=!SERVICE_READY;b.onclick=function(){pick(i);};if(cur===i&&curEx===null)b.className='on';box.appendChild(b);});

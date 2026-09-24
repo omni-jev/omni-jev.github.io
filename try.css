@@ -8,6 +8,8 @@
 .try-page .try-title-row .service-status { margin-top:5px; padding:7px 12px; border-color:var(--border-strong); background:var(--bg); box-shadow:0 5px 16px rgba(14,30,48,.07); font-family:var(--font-mono); font-size:10px }
 .try-page .try-title-row .service-status.ready { border-color:rgba(34,150,92,.28); color:var(--success); background:rgba(34,150,92,.06) }
 .try-page .try-title-row .service-status.error { border-color:rgba(209,76,85,.25); color:#b43b45; background:rgba(209,76,85,.06) }
+.try-page .connection-tip { width:fit-content; max-width:100%; margin:12px auto 0; padding:8px 12px; border:1px solid color-mix(in srgb,var(--amber) 34%,var(--border)); border-radius:7px; background:color-mix(in srgb,var(--amber-soft) 70%,var(--bg)); color:#78501c; font-size:12px; line-height:1.55 }
+.try-page .connection-tip[hidden] { display:none }
 .try-page .service-status.loading::before { width:9px; height:9px; border:2px solid color-mix(in srgb,var(--amber) 28%,var(--border)); border-top-color:var(--amber); background:transparent; animation:service-spin .75s linear infinite }
 @keyframes service-spin { to { transform:rotate(360deg) } }
 .try-page .example-picker { margin-bottom:20px; padding:20px 24px; border:1px solid var(--border); border-radius:12px; background:var(--bg); box-shadow:var(--card-shadow) }
