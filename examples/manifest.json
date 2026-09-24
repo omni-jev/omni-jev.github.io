@@ -1,0 +1,170 @@
+{
+ "examples": [
+  {
+   "file": "e_cooking.mp4",
+   "title": "Cooking",
+   "title_zh": "做菜",
+   "source": "https://commons.wikimedia.org/wiki/File:Cooking_Salmon_20200410_141528.webm",
+   "licence": "CC BY-SA 4.0",
+   "credit": "File:Cooking Salmon 20200410 141528.webm",
+   "questions": [
+    {
+     "type": "choice",
+     "instructions": "What is being prepared in this video?",
+     "options": [
+      "a fish dish",
+      "an omelette",
+      "a salad",
+      "bread dough",
+      "a cake"
+     ]
+    },
+    {
+     "type": "choice",
+     "instructions": "Which of these happens first in the video?",
+     "options": [
+      "something is fried in a pan",
+      "ingredients are chopped",
+      "the dish is plated"
+     ]
+    },
+    {
+     "type": "noul",
+     "instructions": "The video shows food being cooked on a stove."
+    }
+   ]
+  },
+  {
+   "file": "e_coffee.mp4",
+   "title": "Making coffee",
+   "title_zh": "冲咖啡",
+   "source": "https://commons.wikimedia.org/wiki/File:Brewing_Coffee_with_Moka_Alessi_and_Peugeot_Bresil_Mill_-_ASMR_Coffee_Making.webm",
+   "licence": "CC BY 3.0",
+   "credit": "File:Brewing Coffee with Moka Alessi and Peugeot Bresil Mill - ASMR Coffee Making.webm",
+   "questions": [
+    {
+     "type": "choice",
+     "instructions": "What is being made in this video?",
+     "options": [
+      "coffee",
+      "tea",
+      "juice",
+      "a cocktail"
+     ]
+    },
+    {
+     "type": "choice",
+     "instructions": "Considering only the frames up to t=20s, what is the next step?",
+     "options": [
+      "grind the beans",
+      "pour water",
+      "add milk",
+      "serve the cup"
+     ]
+    },
+    {
+     "type": "noul",
+     "instructions": "A cup appears in this video."
+    }
+   ]
+  },
+  {
+   "file": "e_robot.mp4",
+   "title": "Robot arm episode",
+   "title_zh": "机械臂片段",
+   "source": "own recording",
+   "licence": "demo",
+   "credit": "",
+   "questions": [
+    {
+     "type": "choice",
+     "instructions": "Which instruction is the robot executing?",
+     "options": [
+      "pick up the black bowl on the stove and place it on the plate",
+      "pick up the black bowl next to the plate and place it on the plate",
+      "pick up the black bowl between the plate and the ramekin and place it on the plate"
+     ]
+    },
+    {
+     "type": "noul",
+     "instructions": "By the end of the video the bowl has been placed on the plate."
+    },
+    {
+     "type": "choice",
+     "instructions": "Considering only the frames up to t=5s, what happens next?",
+     "options": [
+      "the gripper closes on the bowl",
+      "the gripper moves up",
+      "the bowl is released",
+      "nothing moves"
+     ]
+    }
+   ]
+  },
+  {
+   "file": "e_chess.mp4",
+   "title": "A chess game, one move per second",
+   "title_zh": "一盘棋，每秒一步",
+   "source": "own rendering",
+   "licence": "demo",
+   "credit": "",
+   "questions": [
+    {
+     "type": "noul",
+     "instructions": "The game ends in checkmate."
+    },
+    {
+     "type": "choice",
+     "instructions": "Which side delivers the final blow?",
+     "options": [
+      "White",
+      "Black"
+     ]
+    },
+    {
+     "type": "choice",
+     "instructions": "Which frame shows the opening position, before any move?",
+     "options": [
+      "frame 1",
+      "frame 8",
+      "frame 16"
+     ]
+    }
+   ]
+  },
+  {
+   "file": "e_phone.mp4",
+   "title": "A phone task, one screen per second",
+   "title_zh": "手机操作，每秒一屏",
+   "source": "own recording",
+   "licence": "demo",
+   "credit": "",
+   "questions": [
+    {
+     "type": "choice",
+     "instructions": "What is the user trying to do in this screen recording?",
+     "options": [
+      "find a recipe",
+      "book a flight",
+      "send an email",
+      "play music"
+     ]
+    },
+    {
+     "type": "noul",
+     "instructions": "An error dialog appears at some point in the recording."
+    },
+    {
+     "type": "choice",
+     "instructions": "Which frame shows a search box being used?",
+     "options": [
+      "frame 1",
+      "frame 2",
+      "frame 4",
+      "frame 7"
+     ]
+    }
+   ]
+  }
+ ]
+}
