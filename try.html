@@ -62,8 +62,8 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 <div class="wrap">
   <div class="pane media-pane">
     <div class="pane-head"><div><p class="eyebrow">01 / INPUT</p><h2 data-i18n="input_h">Image or video</h2></div></div>
-    <label class="upload-zone" for="file"><span class="upload-icon" aria-hidden="true">↑</span><span><strong data-i18n="upload_h">Upload your own file</strong><small data-i18n="upload_note">Image or video · max 60 MB for video</small></span>
-      <input type="file" id="file" accept="image/*,video/mp4,video/webm,video/quicktime" disabled></label>
+    <label class="upload-zone" for="file"><span class="upload-icon" aria-hidden="true">↑</span><span><strong data-i18n="upload_h">Upload your own file</strong><small data-i18n="upload_note">PNG/JPEG/WebP/GIF/BMP · MP4/WebM/MOV/M4V</small></span>
+      <input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp,.mp4,.webm,.mov,.m4v,image/png,image/jpeg,image/webp,image/gif,image/bmp,video/mp4,video/webm,video/quicktime,video/x-m4v" disabled></label>
     <p class="source-note" id="imgnote"></p>
     <div id="prep" class="busy" style="display:none"></div>
     <div class="preview"><div id="canvasWrap"><img id="shot" alt=""><canvas id="boxes"></canvas></div></div>
@@ -96,7 +96,7 @@ var I18N={
   title:"Online evaluation", results_h:"Evaluation results", result_empty:"Results will appear here after an evaluation.", running:"Evaluating the current questions…", checking:"connecting to service…", connection_tip:"Tip: In some network environments, a proxy may be needed for a better experience.",
   lead:"Upload an image or video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.",
   draw_hint:"Drag on an image to draw candidate regions; tick “use regions” on a choice question to make them the answer space. Drawn regions cannot be used together with text options, and inference requires at least two valid regions.",
-  examples_h:"Choose an example below for a quick demo", input_h:"Image or video", questions_h:"Questions and options", upload_h:"Upload your own file", upload_note:"Image or video · max 60 MB for video",
+  examples_h:"Choose an example below for a quick demo", input_h:"Image or video", questions_h:"Questions and options", upload_h:"Upload your own file", upload_note:"PNG/JPEG/WebP/GIF/BMP up to 8 MB · MP4/WebM/MOV/M4V up to 60 MB",
   clear:"clear regions", ask:"Run evaluation →", images:"Images", videos:"Videos", clear_example:"Clear example selection",
   ph_instr:"What should the model judge? (English works best)", ph_opts:"options, comma separated", ph_levels:"ordered levels, comma separated",
   useboxes:"use the drawn regions as the options", noul_hint:"a statement about what is shown → one probability that it is true",
@@ -105,7 +105,7 @@ var I18N={
   nudge:"This reads like a question with several answers. Make it a choice and list the options:", switch:"switch to choice",
   loading:"model loading", ready:"ready", queued:"queued", preparing:"sampling 16 frames from the video…",
   vidnote:function(d,p){return "video · 16 frames over "+d+" s, sampled in "+p+" s · this is what the model sees";},
-  need_q:"Write at least one question (choice and score need two or more options).",
+  need_q:"Write at least one question (choice and score need two or more options).", unsupported_file:"Unsupported file. Use PNG, JPEG, WebP, GIF, BMP, MP4, WebM, MOV, or M4V.", empty_file:"The selected file is empty.", image_large:"Image larger than 8 MB.", video_large:"Video larger than 60 MB.", invalid_image:"The image is corrupt or cannot be decoded.", invalid_video:"The file content is not a supported video.", read_failed:"Could not read the selected file.",
   res_head:function(n,ms,rt){return n+" question"+(n>1?"s":"")+" · one pass · server "+ms+" ms · round trip "+rt+" ms";},
   conf:"confidence", renorm:"probabilities were renormalised", abst:"none of the above", yes:"yes", no:"no",
   flat:"flat distribution: the model is saying it does not know",
@@ -114,7 +114,7 @@ var I18N={
   title:"在线体验", results_h:"评测结果", result_empty:"运行评测后，答案概率和耗时会显示在这里。", running:"正在评测当前问题…", checking:"正在连接服务…", connection_tip:"提示：在部分网络环境下可能需要代理以获得更好的体验。",
   lead:"上传图片或视频，设置 choice、score 或 noul 问题后统一提交。页面返回答案概率、服务端耗时和请求往返耗时。",
   draw_hint:"在图上拖动可以框出候选区域；在选择题里勾选“用框作为选项”，这些框就是答案空间。框选区域不可与文本选项同时使用；使用框选区域进行推理时，至少需要两个有效框。",
-  examples_h:"从下方选择一个示例，快速体验~", input_h:"图片或视频", questions_h:"问题与选项", upload_h:"上传自己的文件", upload_note:"支持图片、视频 · 视频上限 60 MB",
+  examples_h:"从下方选择一个示例，快速体验~", input_h:"图片或视频", questions_h:"问题与选项", upload_h:"上传自己的文件", upload_note:"PNG/JPEG/WebP/GIF/BMP 不超过 8 MB · MP4/WebM/MOV/M4V 不超过 60 MB",
   clear:"清除框", ask:"运行评测 →", images:"图片", videos:"视频", clear_example:"清空示例选择",
   ph_instr:"让模型判断什么？（英文效果最好）", ph_opts:"选项，用逗号分隔", ph_levels:"有序档位，用逗号分隔",
   useboxes:"用画出的框作为选项", noul_hint:"对画面的一句陈述 → 它为真的概率",
@@ -123,7 +123,7 @@ var I18N={
   nudge:"这看起来是有多个答案的问题，应该用 choice 并列出选项：", switch:"改成 choice",
   loading:"模型加载中", ready:"已就绪", queued:"排队", preparing:"正在从视频抽 16 帧…",
   vidnote:function(d,p){return "视频 · 全长 "+d+" 秒抽 16 帧，用时 "+p+" 秒 · 模型看到的就是这张图";},
-  need_q:"至少写一个问题（选择题和评分题需要两个以上选项）。",
+  need_q:"至少写一个问题（选择题和评分题需要两个以上选项）。", unsupported_file:"不支持该文件。请使用 PNG、JPEG、WebP、GIF、BMP、MP4、WebM、MOV 或 M4V。", empty_file:"所选文件为空。", image_large:"图片不能超过 8 MB。", video_large:"视频不能超过 60 MB。", invalid_image:"图片已损坏或无法解码。", invalid_video:"文件内容不是可支持的视频。", read_failed:"无法读取所选文件。",
   res_head:function(n,ms,rt){return n+" 个问题 · 一次前向 · 服务端 "+ms+" ms · 往返 "+rt+" ms";},
   conf:"置信度", renorm:"概率被重新归一化", abst:"以上都不是", yes:"是", no:"否",
   flat:"分布很平：模型在表示它不知道",
@@ -178,14 +178,31 @@ function prepVideo(body){var request=++mediaVersion,pr=document.getElementById('
      pr.className='busy';pr.textContent=T('vidnote')(res.j.duration,res.j.prep_s);VID=res.j.id;
      document.getElementById('shot').src=res.j.mosaic;})
    .catch(function(e){if(request!==mediaVersion)return;document.getElementById('ask').disabled=false;pr.className='err';pr.textContent=String(e);});}
-function handleFile(f){if(!SERVICE_READY||!f)return;
-  var request=++mediaVersion;cur=null;curEx=null;renderChips();clearBoxes();document.getElementById('imgnote').textContent=f.name;
-  var isVideo=/^video\//.test(f.type)||/\.(mp4|webm|mov|m4v)$/i.test(f.name);
-  var r=new FileReader();
-  r.onload=function(){if(request!==mediaVersion)return;if(isVideo){if(f.size>60*1024*1024){var pr=document.getElementById('prep');pr.style.display='block';pr.className='err';pr.textContent='video larger than 60 MB';return;}
-      blankQuestions();prepVideo({video:r.result});}
-    else{VID=null;document.getElementById('prep').style.display='none';document.getElementById('shot').src=r.result;blankQuestions();}};
-  r.readAsDataURL(f);}
+var IMAGE_MIMES={'image/png':1,'image/jpeg':1,'image/webp':1,'image/gif':1,'image/bmp':1};
+var VIDEO_MIMES={'video/mp4':1,'video/webm':1,'video/quicktime':1,'video/x-m4v':1};
+function rejectFile(message){var pr=document.getElementById('prep');pr.style.display='block';pr.className='err';pr.textContent=message;
+  VID=null;document.getElementById('shot').removeAttribute('src');document.getElementById('ask').disabled=true;document.getElementById('file').value='';}
+function fileKind(f){var m=/\.([^.]+)$/.exec(f.name.toLowerCase()),ext=m?m[1]:'',generic=!f.type||f.type==='application/octet-stream';
+  var imageExt=/^(png|jpe?g|webp|gif|bmp)$/.test(ext),videoExt=/^(mp4|webm|mov|m4v)$/.test(ext);
+  if((imageExt&&(generic||IMAGE_MIMES[f.type]))||(!ext&&IMAGE_MIMES[f.type]))return 'image';
+  if((videoExt&&(generic||VIDEO_MIMES[f.type]))||(!ext&&VIDEO_MIMES[f.type]))return 'video';
+  return null;}
+function validateImage(f){return new Promise(function(resolve,reject){var url=URL.createObjectURL(f),probe=new Image();
+  probe.onload=function(){URL.revokeObjectURL(url);if(!probe.naturalWidth||!probe.naturalHeight||probe.naturalWidth*probe.naturalHeight>25000000)reject(new Error(T('invalid_image')));else resolve();};
+  probe.onerror=function(){URL.revokeObjectURL(url);reject(new Error(T('invalid_image')));};probe.src=url;});}
+function validateVideo(f){return new Promise(function(resolve,reject){var r=new FileReader();
+  r.onload=function(){var b=new Uint8Array(r.result),mp4=b.length>=12&&b[4]===102&&b[5]===116&&b[6]===121&&b[7]===112,webm=b.length>=4&&b[0]===26&&b[1]===69&&b[2]===223&&b[3]===163;if(mp4||webm)resolve();else reject(new Error(T('invalid_video')));};
+  r.onerror=function(){reject(new Error(T('read_failed')));};r.readAsArrayBuffer(f.slice(0,16));});}
+function handleFile(f){if(!SERVICE_READY||!f)return;var request=++mediaVersion,kind=fileKind(f);
+  cur=null;curEx=null;renderChips();clearBoxes();document.getElementById('imgnote').textContent=f.name;
+  if(!kind){rejectFile(T('unsupported_file'));return;}if(!f.size){rejectFile(T('empty_file'));return;}
+  if(kind==='image'&&f.size>8*1024*1024){rejectFile(T('image_large'));return;}
+  if(kind==='video'&&f.size>60*1024*1024){rejectFile(T('video_large'));return;}
+  (kind==='image'?validateImage(f):validateVideo(f)).then(function(){if(request!==mediaVersion)return;var r=new FileReader();
+    r.onerror=function(){if(request===mediaVersion)rejectFile(T('read_failed'));};
+    r.onload=function(){if(request!==mediaVersion)return;if(kind==='video'){blankQuestions();prepVideo({video:r.result});}
+      else{VID=null;var pr=document.getElementById('prep');pr.style.display='none';pr.className='busy';pr.textContent='';document.getElementById('shot').src=r.result;blankQuestions();document.getElementById('ask').disabled=false;}};
+    var target=f;if(!f.type||f.type==='application/octet-stream'){var ext=(/\.([^.]+)$/.exec(f.name.toLowerCase())||[])[1]||'',types={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',bmp:'image/bmp',mp4:'video/mp4',webm:'video/webm',mov:'video/quicktime',m4v:'video/x-m4v'};target=new Blob([f],{type:types[ext]||'application/octet-stream'});}r.readAsDataURL(target);}).catch(function(e){if(request===mediaVersion)rejectFile(e.message||T('unsupported_file'));});}
 document.getElementById('file').onchange=function(e){handleFile(e.target.files[0]);};
 var uploadZone=document.querySelector('.upload-zone');
 ['dragenter','dragover'].forEach(function(type){uploadZone.addEventListener(type,function(e){e.preventDefault();if(SERVICE_READY)uploadZone.classList.add('dragover');});});
