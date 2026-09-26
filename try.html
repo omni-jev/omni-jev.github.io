@@ -65,6 +65,7 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
     <label class="upload-zone" for="file"><span class="upload-icon" aria-hidden="true">↑</span><span><strong data-i18n="upload_h">Upload your own file</strong><small data-i18n="upload_note">PNG/JPEG/WebP/GIF/BMP · MP4/WebM/MOV/M4V</small></span>
       <input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp,.mp4,.webm,.mov,.m4v,image/png,image/jpeg,image/webp,image/gif,image/bmp,video/mp4,video/webm,video/quicktime,video/x-m4v" disabled></label>
     <p class="source-note" id="imgnote"></p>
+    <p class="upload-cost" id="uploadCost" hidden></p>
     <div id="prep" class="busy" style="display:none"></div>
     <div class="preview"><div id="canvasWrap"><img id="shot" alt=""><canvas id="boxes"></canvas></div></div>
     <div class="region-tools"><span data-i18n="draw_hint">Drag on an image to draw candidate regions; tick “use regions” on a choice question to make them the answer space. Drawn regions cannot be used together with text options, and inference requires at least two valid regions.</span>
@@ -105,7 +106,7 @@ var I18N={
   nudge:"This reads like a question with several answers. Make it a choice and list the options:", switch:"switch to choice",
   loading:"model loading", ready:"ready", queued:"queued", preparing:"sampling 16 frames from the video…",
   vidnote:function(d,p){return "video · 16 frames over "+d+" s, sampled in "+p+" s · this is what the model sees";},
-  need_q:"Write at least one question (choice and score need two or more options).", unsupported_file:"Unsupported file. Use PNG, JPEG, WebP, GIF, BMP, MP4, WebM, MOV, or M4V.", empty_file:"The selected file is empty.", image_large:"Image larger than 8 MB.", video_large:"Video larger than 60 MB.", invalid_image:"The image is corrupt or cannot be decoded.", invalid_video:"The file content is not a supported video.", read_failed:"Could not read the selected file.",
+  need_q:"Write at least one question (choice and score need two or more options).", unsupported_file:"Unsupported file. Use PNG, JPEG, WebP, GIF, BMP, MP4, WebM, MOV, or M4V.", empty_file:"The selected file is empty.", image_large:"Image larger than 8 MB.", video_large:"Video larger than 60 MB.", invalid_image:"The image is corrupt or cannot be decoded.", invalid_video:"The file content is not a supported video.", read_failed:"Could not read the selected file.", upload_cost:"The first inference caches the image and may take additional time.", uploading:"Uploading image for its first run…",
   res_head:function(n,ms,rt){return n+" question"+(n>1?"s":"")+" · one pass · server "+ms+" ms · round trip "+rt+" ms";},
   conf:"confidence", renorm:"probabilities were renormalised", abst:"none of the above", yes:"yes", no:"no",
   flat:"flat distribution: the model is saying it does not know",
@@ -123,18 +124,19 @@ var I18N={
   nudge:"这看起来是有多个答案的问题，应该用 choice 并列出选项：", switch:"改成 choice",
   loading:"模型加载中", ready:"已就绪", queued:"排队", preparing:"正在从视频抽 16 帧…",
   vidnote:function(d,p){return "视频 · 全长 "+d+" 秒抽 16 帧，用时 "+p+" 秒 · 模型看到的就是这张图";},
-  need_q:"至少写一个问题（选择题和评分题需要两个以上选项）。", unsupported_file:"不支持该文件。请使用 PNG、JPEG、WebP、GIF、BMP、MP4、WebM、MOV 或 M4V。", empty_file:"所选文件为空。", image_large:"图片不能超过 8 MB。", video_large:"视频不能超过 60 MB。", invalid_image:"图片已损坏或无法解码。", invalid_video:"文件内容不是可支持的视频。", read_failed:"无法读取所选文件。",
+  need_q:"至少写一个问题（选择题和评分题需要两个以上选项）。", unsupported_file:"不支持该文件。请使用 PNG、JPEG、WebP、GIF、BMP、MP4、WebM、MOV 或 M4V。", empty_file:"所选文件为空。", image_large:"图片不能超过 8 MB。", video_large:"视频不能超过 60 MB。", invalid_image:"图片已损坏或无法解码。", invalid_video:"文件内容不是可支持的视频。", read_failed:"无法读取所选文件。", upload_cost:"首次推理需为图片建立缓存，可能会产生额外的耗时。", uploading:"正在建立缓存…",
   res_head:function(n,ms,rt){return n+" 个问题 · 一次前向 · 服务端 "+ms+" ms · 往返 "+rt+" ms";},
   conf:"置信度", renorm:"概率被重新归一化", abst:"以上都不是", yes:"是", no:"否",
   flat:"分布很平：模型在表示它不知道",
   tip:"提示：英文提问效果最好，中文通常也可以。"}};
 var API_BASE=(document.querySelector('meta[name="omnijev-api-base"]').content||'').replace(/\/+$/,'');
 function apiUrl(path){return API_BASE+'/'+String(path).replace(/^\/+/, '');}
-var LANG=localStorage.getItem('omnijev_lang')||localStorage.getItem('mso_lang')||'zh', PRE=[], EX=[], cur=null, curEx=null, VID=null, boxes=[], drawing=null, mediaVersion=0, evalVersion=0, activeTimer=null, SERVICE_READY=false;
+var LANG=localStorage.getItem('omnijev_lang')||localStorage.getItem('mso_lang')||'zh', PRE=[], EX=[], cur=null, curEx=null, VID=null, OWN_IMAGE_DATA=null, OWN_IMAGE_ID=null, boxes=[], drawing=null, mediaVersion=0, evalVersion=0, activeTimer=null, SERVICE_READY=false;
 function T(k){return I18N[LANG][k];}
 function setLang(l){LANG=l;localStorage.setItem('mso_lang',l);localStorage.setItem('omnijev_lang',l);document.documentElement.lang=(l==='zh'?'zh-CN':'en');
   document.querySelectorAll('[data-i18n]').forEach(function(e){var v=T(e.getAttribute('data-i18n'));if(typeof v==='string')e.textContent=v;});
   document.getElementById('types').innerHTML=T('types');
+  var uploadCost=document.getElementById('uploadCost');if(!uploadCost.hidden)uploadCost.textContent=T('upload_cost');
   document.querySelectorAll('.q').forEach(function(d){relabel(d);});
   renderChips();status();}
 window.addEventListener('site:language',function(e){setLang(e.detail);});
@@ -164,12 +166,15 @@ function loadLists(){fetch(apiUrl('/api/presets')).then(function(r){return r.jso
   fetch(apiUrl('/api/examples')).then(function(r){return r.json();}).then(function(d){EX=d.examples||[];renderChips();}).catch(function(){});}
 function setQuestions(qs){document.getElementById('qs').innerHTML='';(qs||[]).forEach(function(q){addQ(q.type,q);});}
 function blankQuestions(){setQuestions([{type:'choice'},{type:'noul'}]);}
-function pick(i){if(!SERVICE_READY)return;mediaVersion++;cur=i;curEx=null;VID=null;var p=PRE[i];document.getElementById('shot').src=p.image;
+function setUploadCost(state){var e=document.getElementById('uploadCost');e.hidden=!state;e.className='upload-cost';if(state)e.textContent=T('upload_cost');}
+function clearOwnImage(){OWN_IMAGE_DATA=null;OWN_IMAGE_ID=null;setUploadCost(null);}
+function pick(i){if(!SERVICE_READY)return;mediaVersion++;cur=i;curEx=null;VID=null;clearOwnImage();var p=PRE[i];document.getElementById('shot').src=p.image;
   document.getElementById('imgnote').textContent=(LANG==='zh'&&p.note_zh?p.note_zh:p.note)||'';
   clearBoxes();setQuestions(p.questions);renderChips();}
-function pickEx(i){if(!SERVICE_READY)return;curEx=i;cur=null;var x=EX[i];renderChips();clearBoxes();setQuestions(x.questions);
+function pickEx(i){if(!SERVICE_READY)return;curEx=i;cur=null;clearOwnImage();var x=EX[i];renderChips();clearBoxes();setQuestions(x.questions);
   document.getElementById('imgnote').textContent=(LANG==='zh'&&x.title_zh?x.title_zh:x.title);prepVideo({example:x.file});}
 function prepVideo(body){var request=++mediaVersion,pr=document.getElementById('prep');pr.style.display='block';pr.textContent=T('preparing');VID=null;
+  clearOwnImage();
   document.getElementById('ask').disabled=true;
   fetch(apiUrl('/api/prep_video'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
    .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
@@ -181,7 +186,7 @@ function prepVideo(body){var request=++mediaVersion,pr=document.getElementById('
 var IMAGE_MIMES={'image/png':1,'image/jpeg':1,'image/webp':1,'image/gif':1,'image/bmp':1};
 var VIDEO_MIMES={'video/mp4':1,'video/webm':1,'video/quicktime':1,'video/x-m4v':1};
 function rejectFile(message){var pr=document.getElementById('prep');pr.style.display='block';pr.className='err';pr.textContent=message;
-  VID=null;document.getElementById('shot').removeAttribute('src');document.getElementById('ask').disabled=true;document.getElementById('file').value='';}
+  VID=null;clearOwnImage();document.getElementById('shot').removeAttribute('src');document.getElementById('ask').disabled=true;document.getElementById('file').value='';}
 function fileKind(f){var m=/\.([^.]+)$/.exec(f.name.toLowerCase()),ext=m?m[1]:'',generic=!f.type||f.type==='application/octet-stream';
   var imageExt=/^(png|jpe?g|webp|gif|bmp)$/.test(ext),videoExt=/^(mp4|webm|mov|m4v)$/.test(ext);
   if((imageExt&&(generic||IMAGE_MIMES[f.type]))||(!ext&&IMAGE_MIMES[f.type]))return 'image';
@@ -200,8 +205,8 @@ function handleFile(f){if(!SERVICE_READY||!f)return;var request=++mediaVersion,k
   if(kind==='video'&&f.size>60*1024*1024){rejectFile(T('video_large'));return;}
   (kind==='image'?validateImage(f):validateVideo(f)).then(function(){if(request!==mediaVersion)return;var r=new FileReader();
     r.onerror=function(){if(request===mediaVersion)rejectFile(T('read_failed'));};
-    r.onload=function(){if(request!==mediaVersion)return;if(kind==='video'){blankQuestions();prepVideo({video:r.result});}
-      else{VID=null;var pr=document.getElementById('prep');pr.style.display='none';pr.className='busy';pr.textContent='';document.getElementById('shot').src=r.result;blankQuestions();document.getElementById('ask').disabled=false;}};
+    r.onload=function(){if(request!==mediaVersion)return;if(kind==='video'){clearOwnImage();blankQuestions();prepVideo({video:r.result});}
+      else{VID=null;OWN_IMAGE_DATA=r.result;OWN_IMAGE_ID=null;setUploadCost('pending');var pr=document.getElementById('prep');pr.style.display='none';pr.className='busy';pr.textContent='';document.getElementById('shot').src=r.result;blankQuestions();document.getElementById('ask').disabled=false;}};
     var target=f;if(!f.type||f.type==='application/octet-stream'){var ext=(/\.([^.]+)$/.exec(f.name.toLowerCase())||[])[1]||'',types={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',bmp:'image/bmp',mp4:'video/mp4',webm:'video/webm',mov:'video/quicktime',m4v:'video/x-m4v'};target=new Blob([f],{type:types[ext]||'application/octet-stream'});}r.readAsDataURL(target);}).catch(function(e){if(request===mediaVersion)rejectFile(e.message||T('unsupported_file'));});}
 document.getElementById('file').onchange=function(e){handleFile(e.target.files[0]);};
 var uploadZone=document.querySelector('.upload-zone');
@@ -211,7 +216,7 @@ uploadZone.addEventListener('drop',function(e){if(SERVICE_READY)handleFile(e.dat
 function emptyResult(){return resultHead()+'<div class="result-empty"><div><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 9h32v30H8zM14 31l7-7 5 5 8-10M15 17h.01"/></svg><p data-i18n="result_empty">'+esc(T('result_empty'))+'</p></div></div>';}
 function resetWorkbench(){
   mediaVersion++;evalVersion++;if(activeTimer){clearInterval(activeTimer);activeTimer=null;}
-  cur=null;curEx=null;VID=null;drawing=null;document.getElementById('file').value='';
+  cur=null;curEx=null;VID=null;clearOwnImage();drawing=null;document.getElementById('file').value='';
   document.getElementById('shot').removeAttribute('src');document.getElementById('imgnote').textContent='';
   var pr=document.getElementById('prep');pr.style.display='none';pr.className='busy';pr.textContent='';
   document.getElementById('timer').textContent='';setQuestions([]);clearBoxes();renderChips();
@@ -274,20 +279,35 @@ function collect(){var qs=[];document.querySelectorAll('.q').forEach(function(d)
   return qs;}
 function resultHead(meta){return '<div class="result-head"><div><p class="eyebrow">03 / OUTPUT</p><h2>'+esc(T('results_h'))+'</h2></div>'+
   (meta?'<p class="muted result-meta">'+esc(meta)+'</p>':'')+'</div>';}
+function resolveAskImage(src){
+  if(VID)return Promise.resolve({video:VID});
+  if(cur!==null&&src.indexOf('/api/preset_img/')>=0)return Promise.resolve({preset:PRE[cur].id});
+  if(OWN_IMAGE_ID)return Promise.resolve({upload:OWN_IMAGE_ID});
+  if(!OWN_IMAGE_DATA)return Promise.resolve(src);
+  var imageData=OWN_IMAGE_DATA;
+  return fetch(apiUrl('/api/upload_image'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:imageData})})
+   .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+   .then(function(res){
+     if(!res.ok||!res.j.id)throw new Error(res.j.error||'image upload failed');
+     if(OWN_IMAGE_DATA===imageData){OWN_IMAGE_ID=res.j.id;setUploadCost(null);}
+     return {upload:res.j.id};
+   });
+}
 function ask(){
   var request=++evalVersion,qs=collect(),out=document.getElementById('out');
   if(!qs.length){out.innerHTML=resultHead()+'<div class="err">'+T('need_q')+'</div>';return;}
-  var body={questions:qs},src=document.getElementById('shot').src;
-  if(VID)body.image={video:VID};
-  else if(cur!==null&&src.indexOf('/api/preset_img/')>=0)body.image={preset:PRE[cur].id};
-  else body.image=src;
-  document.getElementById('ask').disabled=true;out.innerHTML=resultHead()+'<div class="result-empty busy-state"><div><span class="result-loader"></span><p>'+esc(T('running'))+'</p></div></div>';
+  var body={questions:qs},src=document.getElementById('shot').src,needsUpload=!!(OWN_IMAGE_DATA&&!OWN_IMAGE_ID);
+  document.getElementById('ask').disabled=true;out.innerHTML=resultHead()+'<div class="result-empty busy-state"><div><span class="result-loader"></span><p>'+esc(T(needsUpload?'uploading':'running'))+'</p></div></div>';
   var t0=performance.now(),tm=document.getElementById('timer');tm.className='timer';
   if(activeTimer)clearInterval(activeTimer);activeTimer=setInterval(function(){tm.textContent=((performance.now()-t0)/1000).toFixed(2)+' s';},33);
-  fetch(apiUrl('/api/ask'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-   .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
-   .then(function(res){if(request!==evalVersion)return;clearInterval(activeTimer);activeTimer=null;document.getElementById('ask').disabled=false;
-     if(!res.ok){tm.textContent='';out.innerHTML=resultHead()+'<div class="err">'+esc(res.j.error||'failed')+'</div>';return;}
+  resolveAskImage(src).then(function(image){
+   if(request!==evalVersion)return null;
+   body.image=image;
+   out.querySelector('.busy-state p').textContent=T('running');
+   return fetch(apiUrl('/api/ask'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  }).then(function(r){if(!r)return null;return r.json().then(function(j){return {ok:r.ok,j:j};});})
+   .then(function(res){if(!res||request!==evalVersion)return;clearInterval(activeTimer);activeTimer=null;document.getElementById('ask').disabled=false;
+     if(!res.ok){var error=res.j.error||'failed';if(error==='uploaded image is missing; upload it again'&&OWN_IMAGE_DATA){OWN_IMAGE_ID=null;setUploadCost('pending');}tm.textContent='';out.innerHTML=resultHead()+'<div class="err">'+esc(error)+'</div>';return;}
      var d=res.j;tm.className='timer done';tm.textContent=d.wall_s.toFixed(3)+' s';
      var h=resultHead(T('res_head')(d.n_questions,(1000*d.wall_s).toFixed(0),(performance.now()-t0).toFixed(0)))+'<div class="answer-grid">';
      d.answers.forEach(function(a){
@@ -305,7 +325,7 @@ function ask(){
        h+='</div>';});
      h+='</div><p class="muted result-tip">'+T('tip')+'</p>';
      out.innerHTML=h;})
-   .catch(function(e){if(request!==evalVersion)return;clearInterval(activeTimer);activeTimer=null;document.getElementById('ask').disabled=false;
+   .catch(function(e){if(request!==evalVersion)return;if(OWN_IMAGE_DATA&&!OWN_IMAGE_ID)setUploadCost('pending');clearInterval(activeTimer);activeTimer=null;document.getElementById('ask').disabled=false;
      out.innerHTML=resultHead()+'<div class="err">'+esc(e)+'</div>';});}
 setLang(LANG);loadLists();
 </script><script>
