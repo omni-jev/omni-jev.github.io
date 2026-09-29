@@ -47,7 +47,7 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 .types b{color:var(--fg)}
 @media(max-width:900px){.wrap{grid-template-columns:1fr}}
 </style><link rel="stylesheet" href="try.css"></head><body class="try-page">
-<a class="skip-link" href="#main">跳至主要内容</a><div id="siteHeader"></div><script src="header.js"></script>
+<div id="siteHeader"></div><script src="header.js"></script>
 <main class="try-main" id="main"><div class="try-intro">
 <p class="eyebrow">Online evaluation / 在线体验</p>
 <div class="try-title-row"><h1 data-i18n="title">Online evaluation</h1><span class="service-status loading" id="status" data-i18n="checking">Checking service…</span></div>
@@ -173,7 +173,14 @@ function pick(i){if(!SERVICE_READY)return;mediaVersion++;cur=i;curEx=null;VID=nu
   document.getElementById('imgnote').textContent=(LANG==='zh'&&p.note_zh?p.note_zh:p.note)||'';
   clearBoxes();setQuestions(p.questions);renderChips();}
 function pickEx(i){if(!SERVICE_READY)return;curEx=i;cur=null;clearOwnImage();var x=EX[i];renderChips();clearBoxes();setQuestions(x.questions);
-  document.getElementById('imgnote').textContent=(LANG==='zh'&&x.title_zh?x.title_zh:x.title);prepVideo(apiUrl('/examples/'+encodeURIComponent(x.file)));}
+  document.getElementById('imgnote').textContent=(LANG==='zh'&&x.title_zh?x.title_zh:x.title);prepPresetVideo(x.file);}
+function prepPresetVideo(file){var request=++mediaVersion,pr=document.getElementById('prep');pr.style.display='block';pr.className='busy';pr.textContent=T('preparing_preset');VID=null;
+  clearOwnImage();clearVideoPreview();document.getElementById('ask').disabled=true;
+  fetch(apiUrl('/api/preset_video'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({example:file})})
+   .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+   .then(function(res){if(request!==mediaVersion)return;if(!res.ok||!res.j.mosaic_url)throw new Error(res.j.error||'failed');VID=res.j.id;document.getElementById('shot').src=apiUrl(res.j.mosaic_url);document.getElementById('ask').disabled=false;
+     pr.className='busy';pr.textContent=T('vidnote')(res.j.duration,res.j.prep_s);})
+   .catch(function(e){if(request!==mediaVersion)return;document.getElementById('ask').disabled=true;pr.className='err';pr.textContent=e.message||String(e);});}
 function canvasBlob(canvas,type,quality){return new Promise(function(resolve,reject){canvas.toBlob(function(blob){if(blob)resolve(blob);else reject(new Error(T('read_failed')));},type,quality);});}
 function localImageBlob(file){return new Promise(function(resolve,reject){var url=URL.createObjectURL(file),img=new Image();
   img.onload=function(){var w=img.naturalWidth,h=img.naturalHeight;URL.revokeObjectURL(url);if(!w||!h||w*h>25000000){reject(new Error(T('invalid_image')));return;}
@@ -207,8 +214,7 @@ function localVideoMosaic(file){return new Promise(function(resolve,reject){var 
   video.src=url;video.load();});}
 function prepVideo(source){var request=++mediaVersion,pr=document.getElementById('prep'),started=performance.now();pr.style.display='block';pr.className='busy';pr.textContent=T('preparing');VID=null;
   clearOwnImage();clearVideoPreview();document.getElementById('ask').disabled=true;
-  var sourcePromise=typeof source==='string'?fetch(source).then(function(r){if(!r.ok)throw new Error('video download failed');return r.blob();}):Promise.resolve(source);
-  sourcePromise.then(localVideoMosaic).then(function(result){if(request!==mediaVersion)return null;VIDEO_PREVIEW_URL=URL.createObjectURL(result.blob);document.getElementById('shot').src=VIDEO_PREVIEW_URL;
+  localVideoMosaic(source).then(function(result){if(request!==mediaVersion)return null;VIDEO_PREVIEW_URL=URL.createObjectURL(result.blob);document.getElementById('shot').src=VIDEO_PREVIEW_URL;
     var query='?duration='+encodeURIComponent(result.duration)+'&timestamps='+encodeURIComponent(result.timestamps.join(','));
     return fetch(apiUrl('/api/upload_video_mosaic'+query),{method:'POST',headers:{'Content-Type':'image/jpeg'},body:result.blob}).then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});});
   }).then(function(res){if(!res||request!==mediaVersion)return;if(!res.ok)throw new Error(res.j.error||'failed');VID=res.j.id;document.getElementById('ask').disabled=false;
