@@ -26,7 +26,8 @@
 .try-page .update-log-mark::before { top:10px; box-shadow:0 5px 0 var(--cyan) }
 .try-page .update-log-mark::after { top:20px; width:8px; background:var(--violet) }
 .try-page .update-log-meta { display:flex; align-items:center; gap:12px; flex:none; color:var(--muted); font-family:var(--font-mono); font-size:10px }
-.try-page .update-log-chevron { display:grid; place-items:center; width:24px; height:24px; color:var(--accent); font-size:18px; line-height:1; transition:transform .2s }
+.try-page .update-log-chevron { display:grid; place-items:center; width:24px; height:24px; color:var(--accent); font-size:0; line-height:0; transition:transform .2s }
+.try-page .update-log-chevron::before { width:7px; height:7px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; content:""; transform:rotate(45deg) }
 .try-page .update-log[open] .update-log-chevron { transform:rotate(180deg) }
 .try-page .update-log-body { display:grid; grid-template-columns:126px minmax(0,1fr); gap:24px; padding:20px; border-top:1px solid var(--border); background:linear-gradient(110deg,color-mix(in srgb,var(--accent-soft) 42%,var(--bg)),var(--bg) 48%,color-mix(in srgb,var(--cyan-soft) 34%,var(--bg))) }
 .try-page .update-log-body>time { padding-top:3px; color:var(--accent); font-family:var(--font-mono); font-size:11px; font-weight:700; font-variant-numeric:tabular-nums }
