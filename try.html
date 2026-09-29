@@ -54,20 +54,19 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 <p class="connection-tip" id="connectionTip" data-i18n="connection_tip" role="status" hidden>Tip: In some network environments, a proxy may be needed for a better experience.</p>
 <p class="lead" data-i18n="lead">Upload one or more images, or a video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.</p>
 </div>
-<section class="update-log" aria-labelledby="update-log-title">
-  <header class="update-log-heading"><span class="update-log-mark" aria-hidden="true"></span><span><strong id="update-log-title" data-i18n="news_h">更新日志</strong><small>NEWS / CHANGELOG</small></span></header>
-  <div class="update-log-releases">
-    <details class="update-log-release" open>
-      <summary><time datetime="2026-09-29">2026.09.29</time><span class="update-log-meta"><span data-i18n="news_latest">最新 · 2 条更新</span><span class="update-log-chevron" aria-hidden="true">⌄</span></span></summary>
-      <div class="update-log-body">
-        <ol>
-          <li><span aria-hidden="true">01</span><p data-i18n="news_model">在线体验模型切换到 OmniJev-v1.1 4B 版本。</p></li>
-          <li><span aria-hidden="true">02</span><p data-i18n="news_media">支持多图片推理，将预处理放置用户侧，优化推理体验。</p></li>
-        </ol>
-      </div>
-    </details>
+<details class="update-log" open>
+  <summary>
+    <span class="update-log-heading"><span class="update-log-mark" aria-hidden="true"></span><span><strong data-i18n="news_h">更新日志</strong><small>NEWS · 2026.09.29</small></span></span>
+    <span class="update-log-meta"><span data-i18n="news_count">2 条更新</span><span class="update-log-chevron" aria-hidden="true">⌄</span></span>
+  </summary>
+  <div class="update-log-body">
+    <time datetime="2026-09-29">2026.09.29</time>
+    <ol>
+      <li><span aria-hidden="true">01</span><p data-i18n="news_model">在线体验模型切换到 OmniJev-v1.1 4B 版本。</p></li>
+      <li><span aria-hidden="true">02</span><p data-i18n="news_media">支持多图片推理，将预处理放置用户侧，优化推理体验。</p></li>
+    </ol>
   </div>
-</section>
+</details>
 <section class="example-picker" aria-labelledby="examples-heading">
   <div class="example-picker-head"><p class="eyebrow">EXAMPLES / 示例</p><h2 id="examples-heading" data-i18n="examples_h">Choose an example below for a quick demo</h2></div>
   <div class="example-picker-options"><div class="presets" id="presets"></div><div class="presets" id="examples"></div></div>
@@ -109,7 +108,7 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 var I18N={
  en:{nav_home:"Home",nav_benchmarks:"Benchmarks",nav_try:"Online use",
   title:"Online evaluation", results_h:"Evaluation results", result_empty:"Results will appear here after an evaluation.", running:"Evaluating the current questions…", checking:"connecting to service…", connection_tip:"Tip: In some network environments, a proxy may be needed for a better experience.",
-  news_h:"Changelog", news_latest:"Latest · 2 updates", news_model:"The online demo now runs OmniJev-v1.1 4B.", news_media:"Multi-image inference is now supported, with preprocessing moved to the browser for a faster, more efficient experience.",
+  news_h:"Changelog", news_count:"2 updates", news_model:"The online demo now runs OmniJev-v1.1 4B.", news_media:"Multi-image inference is now supported, with preprocessing moved to the browser for a faster, more efficient experience.",
   lead:"Upload one or more images, or a video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.",
   draw_hint:"Drag on an image to draw candidate regions; tick “use regions” on a choice question to make them the answer space. Drawn regions cannot be used together with text options, and inference requires at least two valid regions.",
   examples_h:"Choose an example below for a quick demo", input_h:"Images or video", questions_h:"Questions and options", upload_h:"Upload up to 4 images, or one video", upload_note:"Processed locally · source files are not uploaded",
@@ -128,7 +127,7 @@ var I18N={
   tip:"Tip: English questions work best; Chinese usually works too."},
  zh:{nav_home:"首页",nav_benchmarks:"基准测试",nav_try:"在线体验",
   title:"在线体验", results_h:"评测结果", result_empty:"运行评测后，答案概率和耗时会显示在这里。", running:"正在评测当前问题…", checking:"正在连接服务…", connection_tip:"提示：在部分网络环境下可能需要代理以获得更好的体验。",
-  news_h:"更新日志", news_latest:"最新 · 2 条更新", news_model:"在线体验模型切换到 OmniJev-v1.1 4B 版本。", news_media:"支持多图片推理，将预处理放置用户侧，优化推理体验。",
+  news_h:"更新日志", news_count:"2 条更新", news_model:"在线体验模型切换到 OmniJev-v1.1 4B 版本。", news_media:"支持多图片推理，将预处理放置用户侧，优化推理体验。",
   lead:"上传一张或多张图片，或上传一个视频，设置 choice、score 或 noul 问题后统一提交。页面返回答案概率、服务端耗时和请求往返耗时。",
   draw_hint:"在图上拖动可以框出候选区域；在选择题里勾选“用框作为选项”，这些框就是答案空间。框选区域不可与文本选项同时使用；使用框选区域进行推理时，至少需要两个有效框。",
   examples_h:"从下方选择一个示例，快速体验~", input_h:"图片或视频", questions_h:"问题与选项", upload_h:"最多上传 4 张图片，或 1 个视频", upload_note:"浏览器本地处理 · 不上传原始文件",
