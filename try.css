@@ -12,6 +12,30 @@
 .try-page .connection-tip[hidden] { display:none }
 .try-page .service-status.loading::before { width:9px; height:9px; border:2px solid color-mix(in srgb,var(--amber) 28%,var(--border)); border-top-color:var(--amber); background:transparent; animation:service-spin .75s linear infinite }
 @keyframes service-spin { to { transform:rotate(360deg) } }
+.try-page .update-log { margin:0 0 20px; overflow:hidden; border:1px solid var(--border); border-radius:10px; background:var(--bg); box-shadow:0 5px 18px rgba(14,30,48,.045) }
+.try-page .update-log summary { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:72px; padding:15px 20px; cursor:pointer; list-style:none; user-select:none; transition:background .15s }
+.try-page .update-log summary::-webkit-details-marker { display:none }
+.try-page .update-log summary:hover { background:var(--bg-alt) }
+.try-page .update-log summary:focus-visible { outline:2px solid var(--accent); outline-offset:-3px }
+.try-page .update-log-heading { display:flex; align-items:center; gap:13px; min-width:0 }
+.try-page .update-log-heading>span:last-child { display:grid; gap:2px }
+.try-page .update-log-heading strong { color:var(--fg); font-family:var(--font-heading); font-size:14px; font-weight:800 }
+.try-page .update-log-heading small { color:var(--muted); font-family:var(--font-mono); font-size:9px; letter-spacing:0 }
+.try-page .update-log-mark { position:relative; width:32px; height:32px; flex:none; border:1px solid color-mix(in srgb,var(--accent) 28%,var(--border)); border-radius:7px; background:var(--accent-soft) }
+.try-page .update-log-mark::before,.try-page .update-log-mark::after { position:absolute; left:9px; width:12px; height:2px; border-radius:2px; background:var(--accent); content:"" }
+.try-page .update-log-mark::before { top:10px; box-shadow:0 5px 0 var(--cyan) }
+.try-page .update-log-mark::after { top:20px; width:8px; background:var(--violet) }
+.try-page .update-log-meta { display:flex; align-items:center; gap:12px; flex:none; color:var(--muted); font-family:var(--font-mono); font-size:10px }
+.try-page .update-log-chevron { display:grid; place-items:center; width:24px; height:24px; color:var(--accent); font-size:18px; line-height:1; transition:transform .2s }
+.try-page .update-log[open] .update-log-chevron { transform:rotate(180deg) }
+.try-page .update-log-body { display:grid; grid-template-columns:126px minmax(0,1fr); gap:24px; padding:20px; border-top:1px solid var(--border); background:linear-gradient(110deg,color-mix(in srgb,var(--accent-soft) 42%,var(--bg)),var(--bg) 48%,color-mix(in srgb,var(--cyan-soft) 34%,var(--bg))) }
+.try-page .update-log-body>time { padding-top:3px; color:var(--accent); font-family:var(--font-mono); font-size:11px; font-weight:700; font-variant-numeric:tabular-nums }
+.try-page .update-log-body ol { display:grid; gap:0; margin:0; padding:0; list-style:none }
+.try-page .update-log-body li { display:grid; grid-template-columns:34px minmax(0,1fr); gap:12px; align-items:start; padding:0 0 17px; border-bottom:1px solid color-mix(in srgb,var(--border) 75%,transparent) }
+.try-page .update-log-body li+li { padding-top:17px }
+.try-page .update-log-body li:last-child { padding-bottom:0; border-bottom:0 }
+.try-page .update-log-body li>span { color:var(--violet); font-family:var(--font-mono); font-size:10px; font-weight:700 }
+.try-page .update-log-body p { margin:0; color:var(--fg); font-size:13px; line-height:1.65 }
 .try-page .example-picker { margin-bottom:20px; padding:20px 24px; border:1px solid var(--border); border-radius:12px; background:var(--bg); box-shadow:var(--card-shadow) }
 .try-page .example-picker-head .eyebrow { margin:0 0 4px; color:var(--violet); font-size:10px }
 .try-page .example-picker-head h2 { margin:0; font-family:var(--font-heading); font-size:18px; font-weight:800; letter-spacing:-.025em }
@@ -102,4 +126,4 @@
 .try-page .bar.top i { background:var(--success) }
 .try-page .busy,.try-page .err { margin:12px 0; font-size:12px }
 @media (max-width:980px) { .try-page .workbench-pane { grid-template-columns:1fr }.try-page .result-pane { border-top:1px solid var(--border); border-left:0 }.try-page .answer-grid { grid-template-columns:1fr } }
-@media (max-width:720px) { .try-main { width:min(100% - 32px,1152px); padding-top:106px }.try-intro { margin-bottom:26px }.try-intro .lead { font-size:14px }.try-page .example-picker { padding:17px }.try-page .pane { padding:17px }.try-page .workbench-pane { padding:0 }.try-page .questions-pane,.try-page .result-pane { padding:17px }.try-page .pane-head h2 { font-size:18px }.try-page #shot { max-height:500px }.try-page .question-actions button.primary { width:100% }.try-page .result-head { display:grid; gap:8px }.try-page .result-meta { text-align:left } }
+@media (max-width:720px) { .try-main { width:min(100% - 32px,1152px); padding-top:106px }.try-intro { margin-bottom:26px }.try-intro .lead { font-size:14px }.try-page .update-log summary { min-height:66px; padding:13px 15px }.try-page .update-log-meta>span:first-child { display:none }.try-page .update-log-body { grid-template-columns:1fr; gap:13px; padding:17px 15px }.try-page .update-log-body>time { padding:0 }.try-page .example-picker { padding:17px }.try-page .pane { padding:17px }.try-page .workbench-pane { padding:0 }.try-page .questions-pane,.try-page .result-pane { padding:17px }.try-page .pane-head h2 { font-size:18px }.try-page #shot { max-height:500px }.try-page .question-actions button.primary { width:100% }.try-page .result-head { display:grid; gap:8px }.try-page .result-meta { text-align:left } }
