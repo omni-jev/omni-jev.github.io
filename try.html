@@ -52,7 +52,7 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 <p class="eyebrow">Online evaluation / 在线体验</p>
 <div class="try-title-row"><h1 data-i18n="title">Online evaluation</h1><span class="service-status loading" id="status" data-i18n="checking">Checking service…</span></div>
 <p class="connection-tip" id="connectionTip" data-i18n="connection_tip" role="status" hidden>Tip: In some network environments, a proxy may be needed for a better experience.</p>
-<p class="lead" data-i18n="lead">Upload an image or video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.</p>
+<p class="lead" data-i18n="lead">Upload one or more images, or a video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.</p>
 </div>
 <section class="example-picker" aria-labelledby="examples-heading">
   <div class="example-picker-head"><p class="eyebrow">EXAMPLES / 示例</p><h2 id="examples-heading" data-i18n="examples_h">Choose an example below for a quick demo</h2></div>
@@ -61,9 +61,9 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 </section>
 <div class="wrap">
   <div class="pane media-pane">
-    <div class="pane-head"><div><p class="eyebrow">01 / INPUT</p><h2 data-i18n="input_h">Image or video</h2></div></div>
-    <label class="upload-zone" for="file"><span class="upload-icon" aria-hidden="true">↑</span><span><strong data-i18n="upload_h">Upload your own file</strong><small data-i18n="upload_note">PNG/JPEG/WebP/GIF/BMP · MP4/WebM/MOV/M4V</small></span>
-      <input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp,.mp4,.webm,.mov,.m4v,image/png,image/jpeg,image/webp,image/gif,image/bmp,video/mp4,video/webm,video/quicktime,video/x-m4v" disabled></label>
+    <div class="pane-head"><div><p class="eyebrow">01 / INPUT</p><h2 data-i18n="input_h">Images or video</h2></div></div>
+    <label class="upload-zone" for="file"><span class="upload-icon" aria-hidden="true">↑</span><span><strong data-i18n="upload_h">Upload up to 4 images, or one video</strong><small data-i18n="upload_note">PNG/JPEG/WebP/GIF/BMP · MP4/WebM/MOV/M4V</small></span>
+      <input type="file" id="file" multiple accept=".png,.jpg,.jpeg,.webp,.gif,.bmp,.mp4,.webm,.mov,.m4v,image/png,image/jpeg,image/webp,image/gif,image/bmp,video/mp4,video/webm,video/quicktime,video/x-m4v" disabled></label>
     <p class="source-note" id="imgnote"></p>
     <p class="upload-cost" id="uploadCost" hidden></p>
     <div id="prep" class="busy" style="display:none"></div>
@@ -95,43 +95,43 @@ button.ghost{font:inherit;background:#fff;border:1.5px solid var(--acc);color:va
 var I18N={
  en:{nav_home:"Home",nav_benchmarks:"Benchmarks",nav_try:"Online use",
   title:"Online evaluation", results_h:"Evaluation results", result_empty:"Results will appear here after an evaluation.", running:"Evaluating the current questions…", checking:"connecting to service…", connection_tip:"Tip: In some network environments, a proxy may be needed for a better experience.",
-  lead:"Upload an image or video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.",
+  lead:"Upload one or more images, or a video, define choice, score or noul questions, and submit them together. The page returns the answer probabilities and measured latency.",
   draw_hint:"Drag on an image to draw candidate regions; tick “use regions” on a choice question to make them the answer space. Drawn regions cannot be used together with text options, and inference requires at least two valid regions.",
-  examples_h:"Choose an example below for a quick demo", input_h:"Image or video", questions_h:"Questions and options", upload_h:"Upload your own file", upload_note:"PNG/JPEG/WebP/GIF/BMP up to 8 MB · MP4/WebM/MOV/M4V up to 60 MB",
+  examples_h:"Choose an example below for a quick demo", input_h:"Images or video", questions_h:"Questions and options", upload_h:"Upload up to 4 images, or one video", upload_note:"Each image up to 8 MB · one video up to 60 MB",
   clear:"clear regions", ask:"Run evaluation →", images:"Images", videos:"Videos", clear_example:"Clear example selection",
   ph_instr:"What should the model judge? (English works best)", ph_opts:"options, comma separated", ph_levels:"ordered levels, comma separated",
   useboxes:"use the drawn regions as the options", noul_hint:"a statement about what is shown → one probability that it is true",
   choice_hint:"pick one of the options, or none of the above", score_hint:"ordered levels, one probability each",
   types:"<b>choice</b> selects one answer from the available options and may return “none of the above”; <b>score</b> evaluates an amount or degree on ordered levels; <b>noul</b> determines whether a statement is true (yes/no).",
   nudge:"This reads like a question with several answers. Make it a choice and list the options:", switch:"switch to choice",
-  loading:"model loading", ready:"ready", queued:"queued", preparing:"sampling 16 video frames locally…", preparing_image:"processing image locally…",
+  loading:"model loading", ready:"ready", queued:"queued", preparing:"sampling 16 video frames locally…", preparing_preset:"loading the prepared video frames…", preparing_image:"processing image locally…", preparing_images:"processing images into a numbered panel…",
   vidnote:function(d,p){return "video · 16 frames over "+d+" s, sampled in "+p+" s · this is what the model sees";},
-  need_q:"Write at least one question (choice and score need two or more options).", unsupported_file:"Unsupported file. Use PNG, JPEG, WebP, GIF, BMP, MP4, WebM, MOV, or M4V.", empty_file:"The selected file is empty.", image_large:"Image larger than 8 MB.", video_large:"Video larger than 60 MB.", invalid_image:"The image is corrupt or cannot be decoded.", invalid_video:"The file content is not a supported video.", read_failed:"Could not read the selected file.", upload_cost:"The first inference caches the image and may take additional time.", uploading:"Uploading image for its first run…",
+  need_q:"Write at least one question (choice and score need two or more options).", unsupported_file:"Unsupported file. Use PNG, JPEG, WebP, GIF, BMP, MP4, WebM, MOV, or M4V.", empty_file:"A selected file is empty.", image_large:"Each image must be 8 MB or smaller.", video_large:"Video larger than 60 MB.", invalid_image:"An image is corrupt or cannot be decoded.", invalid_video:"The file content is not a supported video.", read_failed:"Could not read the selected file.", too_many_images:"Select at most 4 images.", mixed_media:"Select either up to 4 images or one video, not both.", multi_note:function(n){return n+" images · numbered in reading order · this panel is what the model sees";}, upload_cost:"The first inference caches the image inputs and may take additional time.", uploading:"Uploading image inputs for their first run…",
   res_head:function(n,ms,rt){return n+" question"+(n>1?"s":"")+" · one pass · server "+ms+" ms · round trip "+rt+" ms";},
   conf:"confidence", renorm:"probabilities were renormalised", abst:"none of the above", yes:"yes", no:"no",
   flat:"flat distribution: the model is saying it does not know",
   tip:"Tip: English questions work best; Chinese usually works too."},
  zh:{nav_home:"首页",nav_benchmarks:"基准测试",nav_try:"在线体验",
   title:"在线体验", results_h:"评测结果", result_empty:"运行评测后，答案概率和耗时会显示在这里。", running:"正在评测当前问题…", checking:"正在连接服务…", connection_tip:"提示：在部分网络环境下可能需要代理以获得更好的体验。",
-  lead:"上传图片或视频，设置 choice、score 或 noul 问题后统一提交。页面返回答案概率、服务端耗时和请求往返耗时。",
+  lead:"上传一张或多张图片，或上传一个视频，设置 choice、score 或 noul 问题后统一提交。页面返回答案概率、服务端耗时和请求往返耗时。",
   draw_hint:"在图上拖动可以框出候选区域；在选择题里勾选“用框作为选项”，这些框就是答案空间。框选区域不可与文本选项同时使用；使用框选区域进行推理时，至少需要两个有效框。",
-  examples_h:"从下方选择一个示例，快速体验~", input_h:"图片或视频", questions_h:"问题与选项", upload_h:"上传自己的文件", upload_note:"PNG/JPEG/WebP/GIF/BMP 不超过 8 MB · MP4/WebM/MOV/M4V 不超过 60 MB",
+  examples_h:"从下方选择一个示例，快速体验~", input_h:"图片或视频", questions_h:"问题与选项", upload_h:"最多上传 4 张图片，或 1 个视频", upload_note:"每张图片不超过 8 MB · 视频不超过 60 MB",
   clear:"清除框", ask:"运行评测 →", images:"图片", videos:"视频", clear_example:"清空示例选择",
   ph_instr:"让模型判断什么？（英文效果最好）", ph_opts:"选项，用逗号分隔", ph_levels:"有序档位，用逗号分隔",
   useboxes:"用画出的框作为选项", noul_hint:"对画面的一句陈述 → 它为真的概率",
   choice_hint:"从选项里选一个，或者“以上都不是”", score_hint:"有序档位，每档一个概率",
   types:"<b>choice</b> 用于从候选项中选择一个答案，并允许返回“以上都不是”；<b>score</b> 用于按有序档位评估程度或数量；<b>noul</b> 用于判断一项陈述是否成立（是/否）。",
   nudge:"这看起来是有多个答案的问题，应该用 choice 并列出选项：", switch:"改成 choice",
-  loading:"模型加载中", ready:"已就绪", queued:"排队", preparing:"正在本地抽取视频的 16 帧…", preparing_image:"正在本地处理图片…",
+  loading:"模型加载中", ready:"已就绪", queued:"排队", preparing:"正在本地抽取视频的 16 帧…", preparing_preset:"正在加载预设视频的帧拼图…", preparing_image:"正在本地处理图片…", preparing_images:"正在将多张图片合成为编号拼板…",
   vidnote:function(d,p){return "视频 · 全长 "+d+" 秒抽 16 帧，用时 "+p+" 秒 · 模型看到的就是这张图";},
-  need_q:"至少写一个问题（选择题和评分题需要两个以上选项）。", unsupported_file:"不支持该文件。请使用 PNG、JPEG、WebP、GIF、BMP、MP4、WebM、MOV 或 M4V。", empty_file:"所选文件为空。", image_large:"图片不能超过 8 MB。", video_large:"视频不能超过 60 MB。", invalid_image:"图片已损坏或无法解码。", invalid_video:"文件内容不是可支持的视频。", read_failed:"无法读取所选文件。", upload_cost:"首次推理需为图片建立缓存，可能会产生额外的耗时。", uploading:"正在建立缓存…",
+  need_q:"至少写一个问题（选择题和评分题需要两个以上选项）。", unsupported_file:"不支持该文件。请使用 PNG、JPEG、WebP、GIF、BMP、MP4、WebM、MOV 或 M4V。", empty_file:"所选文件中有空文件。", image_large:"每张图片不能超过 8 MB。", video_large:"视频不能超过 60 MB。", invalid_image:"有图片已损坏或无法解码。", invalid_video:"文件内容不是可支持的视频。", read_failed:"无法读取所选文件。", too_many_images:"最多选择 4 张图片。", mixed_media:"请选择最多 4 张图片，或单独选择 1 个视频，不能混合上传。", multi_note:function(n){return n+" 张图片 · 按阅读顺序编号 · 模型看到的就是这张拼板";}, upload_cost:"首次推理需为图片输入建立缓存，可能会产生额外的耗时。", uploading:"正在为图片输入建立缓存…",
   res_head:function(n,ms,rt){return n+" 个问题 · 一次前向 · 服务端 "+ms+" ms · 往返 "+rt+" ms";},
   conf:"置信度", renorm:"概率被重新归一化", abst:"以上都不是", yes:"是", no:"否",
   flat:"分布很平：模型在表示它不知道",
   tip:"提示：英文提问效果最好，中文通常也可以。"}};
 var API_BASE=(document.querySelector('meta[name="omnijev-api-base"]').content||'').replace(/\/+$/,'');
 function apiUrl(path){return API_BASE+'/'+String(path).replace(/^\/+/, '');}
-var LANG=localStorage.getItem('omnijev_lang')||localStorage.getItem('mso_lang')||'zh', PRE=[], EX=[], cur=null, curEx=null, VID=null, OWN_IMAGE_BLOB=null, OWN_IMAGE_URL=null, VIDEO_PREVIEW_URL=null, OWN_IMAGE_ID=null, boxes=[], drawing=null, mediaVersion=0, evalVersion=0, activeTimer=null, SERVICE_READY=false;
+var LANG=localStorage.getItem('omnijev_lang')||localStorage.getItem('mso_lang')||'zh', PRE=[], EX=[], cur=null, curEx=null, VID=null, OWN_IMAGES=[], OWN_IMAGE_URL=null, VIDEO_PREVIEW_URL=null, boxes=[], drawing=null, mediaVersion=0, evalVersion=0, activeTimer=null, SERVICE_READY=false;
 function T(k){return I18N[LANG][k];}
 function setLang(l){LANG=l;localStorage.setItem('mso_lang',l);localStorage.setItem('omnijev_lang',l);document.documentElement.lang=(l==='zh'?'zh-CN':'en');
   document.querySelectorAll('[data-i18n]').forEach(function(e){var v=T(e.getAttribute('data-i18n'));if(typeof v==='string')e.textContent=v;});
@@ -153,7 +153,7 @@ function status(){var e=document.getElementById('status'),controller=new AbortCo
   if(!e.classList.contains('ready')&&!e.classList.contains('loading')){e.className='service-status loading';e.textContent=T('checking');}
   fetch(apiUrl('/api/status'),{signal:controller.signal}).then(function(r){if(!r.ok)throw new Error('status '+r.status);return r.json();}).then(function(s){clearTimeout(timeout);
     if(s.error){e.className='service-status error';e.textContent='error: '+String(s.error).slice(0,60);setServiceReady(false);setConnectionTip(true);return;}
-    if(s.ready){e.className='service-status ready';e.textContent=T('ready')+(s.queue?(' · '+s.queue+' '+T('queued')):'');setServiceReady(true);setConnectionTip(false);}
+    if(s.ready){e.className='service-status ready';e.textContent=T('ready')+(s.model?(' · '+s.model):'')+(s.queue?(' · '+s.queue+' '+T('queued')):'');setServiceReady(true);setConnectionTip(false);}
     else{e.className='service-status loading';e.textContent=T('loading')+' … '+Math.round(s.loading_s||0)+' s';setServiceReady(false);setTimeout(status,4000);}
   }).catch(function(){clearTimeout(timeout);e.className='service-status error';e.textContent=LANG==='zh'?'未连接推理服务':'inference server unavailable';setServiceReady(false);setConnectionTip(true);});}
 function renderChips(){
@@ -167,7 +167,7 @@ function loadLists(){fetch(apiUrl('/api/presets')).then(function(r){return r.jso
 function setQuestions(qs){document.getElementById('qs').innerHTML='';(qs||[]).forEach(function(q){addQ(q.type,q);});}
 function blankQuestions(){setQuestions([{type:'choice'},{type:'noul'}]);}
 function setUploadCost(state){var e=document.getElementById('uploadCost');e.hidden=!state;e.className='upload-cost';if(state)e.textContent=T('upload_cost');}
-function clearOwnImage(){if(OWN_IMAGE_URL)URL.revokeObjectURL(OWN_IMAGE_URL);OWN_IMAGE_BLOB=null;OWN_IMAGE_URL=null;OWN_IMAGE_ID=null;setUploadCost(null);}
+function clearOwnImage(){if(OWN_IMAGE_URL)URL.revokeObjectURL(OWN_IMAGE_URL);OWN_IMAGES=[];OWN_IMAGE_URL=null;setUploadCost(null);}
 function clearVideoPreview(){if(VIDEO_PREVIEW_URL)URL.revokeObjectURL(VIDEO_PREVIEW_URL);VIDEO_PREVIEW_URL=null;}
 function pick(i){if(!SERVICE_READY)return;mediaVersion++;cur=i;curEx=null;VID=null;clearOwnImage();clearVideoPreview();var p=PRE[i];document.getElementById('shot').src=p.image;
   document.getElementById('imgnote').textContent=(LANG==='zh'&&p.note_zh?p.note_zh:p.note)||'';
@@ -181,6 +181,15 @@ function localImageBlob(file){return new Promise(function(resolve,reject){var ur
     var ctx=canvas.getContext('2d');ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
     canvasBlob(canvas,'image/jpeg',0.9).then(resolve,reject);};
   img.onerror=function(){URL.revokeObjectURL(url);reject(new Error(T('invalid_image')));};img.src=url;});}
+function imageFromBlob(blob){return new Promise(function(resolve,reject){var url=URL.createObjectURL(blob),img=new Image();
+  img.onload=function(){URL.revokeObjectURL(url);resolve(img);};img.onerror=function(){URL.revokeObjectURL(url);reject(new Error(T('invalid_image')));};img.src=url;});}
+function numberedPanel(blobs){if(blobs.length===1)return Promise.resolve(blobs[0]);return Promise.all(blobs.map(imageFromBlob)).then(function(images){
+  var sizes=images.map(function(image){var scale=Math.min(1,448/Math.max(image.naturalWidth,image.naturalHeight));return {w:Math.max(1,Math.round(image.naturalWidth*scale)),h:Math.max(1,Math.round(image.naturalHeight*scale))};});
+  var cols=images.length===2?2:(images.length<=4?2:3),rows=Math.ceil(images.length/cols),cw=Math.max.apply(null,sizes.map(function(s){return s.w;})),ch=Math.max.apply(null,sizes.map(function(s){return s.h;})),border=6,label=22;
+  var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');canvas.width=cols*cw+(cols+1)*border;canvas.height=rows*(ch+label)+(rows+1)*border;ctx.fillStyle='rgb(32,32,32)';ctx.fillRect(0,0,canvas.width,canvas.height);
+  images.forEach(function(image,index){var col=index%cols,row=Math.floor(index/cols),size=sizes[index],x=border+col*(cw+border),y=border+row*(ch+label+border);ctx.fillStyle='#fff';ctx.font='12px sans-serif';ctx.fillText(String(index+1),x+2,y+14);ctx.drawImage(image,x+(cw-size.w)/2,y+label+(ch-size.h)/2,size.w,size.h);});
+  return canvasBlob(canvas,'image/jpeg',0.9);
+ });}
 function seekVideo(video,time){return new Promise(function(resolve,reject){var done=false,timer=setTimeout(function(){finish(new Error(T('invalid_video')));},15000);
   function finish(error){if(done)return;done=true;clearTimeout(timer);video.removeEventListener('seeked',ready);error?reject(error):resolve();}
   function ready(){setTimeout(function(){finish();},0);}video.addEventListener('seeked',ready);try{video.currentTime=time;}catch(e){finish(e);}});}
@@ -217,21 +226,27 @@ function fileKind(f){var m=/\.([^.]+)$/.exec(f.name.toLowerCase()),ext=m?m[1]:''
 function validateVideo(f){return new Promise(function(resolve,reject){var r=new FileReader();
   r.onload=function(){var b=new Uint8Array(r.result),mp4=b.length>=12&&b[4]===102&&b[5]===116&&b[6]===121&&b[7]===112,webm=b.length>=4&&b[0]===26&&b[1]===69&&b[2]===223&&b[3]===163;if(mp4||webm)resolve();else reject(new Error(T('invalid_video')));};
   r.onerror=function(){reject(new Error(T('read_failed')));};r.readAsArrayBuffer(f.slice(0,16));});}
-function handleFile(f){if(!SERVICE_READY||!f)return;var request=++mediaVersion,kind=fileKind(f);
-  cur=null;curEx=null;renderChips();clearBoxes();document.getElementById('imgnote').textContent=f.name;
-  if(!kind){rejectFile(T('unsupported_file'));return;}if(!f.size){rejectFile(T('empty_file'));return;}
-  if(kind==='image'&&f.size>8*1024*1024){rejectFile(T('image_large'));return;}
-  if(kind==='video'&&f.size>60*1024*1024){rejectFile(T('video_large'));return;}
-  var target=f;if(!f.type||f.type==='application/octet-stream'){var ext=(/\.([^.]+)$/.exec(f.name.toLowerCase())||[])[1]||'',types={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',bmp:'image/bmp',mp4:'video/mp4',webm:'video/webm',mov:'video/quicktime',m4v:'video/x-m4v'};target=new Blob([f],{type:types[ext]||'application/octet-stream'});}
-  if(kind==='video'){validateVideo(target).then(function(){if(request!==mediaVersion)return;blankQuestions();prepVideo(target);}).catch(function(e){if(request===mediaVersion)rejectFile(e.message||T('unsupported_file'));});return;}
-  var pr=document.getElementById('prep');pr.style.display='block';pr.className='busy';pr.textContent=T('preparing_image');document.getElementById('ask').disabled=true;
-  localImageBlob(target).then(function(blob){if(request!==mediaVersion)return;VID=null;clearVideoPreview();clearOwnImage();OWN_IMAGE_BLOB=blob;OWN_IMAGE_URL=URL.createObjectURL(blob);setUploadCost('pending');pr.style.display='none';pr.textContent='';document.getElementById('shot').src=OWN_IMAGE_URL;blankQuestions();document.getElementById('ask').disabled=false;})
+function normalizedFile(f){if(f.type&&f.type!=='application/octet-stream')return f;var ext=(/\.([^.]+)$/.exec(f.name.toLowerCase())||[])[1]||'',types={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',bmp:'image/bmp',mp4:'video/mp4',webm:'video/webm',mov:'video/quicktime',m4v:'video/x-m4v'};return new Blob([f],{type:types[ext]||'application/octet-stream'});}
+function handleFiles(selected){if(!SERVICE_READY||!selected||!selected.length)return;var files=Array.prototype.slice.call(selected),request=++mediaVersion,kinds=files.map(fileKind);
+  cur=null;curEx=null;renderChips();clearBoxes();
+  if(kinds.some(function(kind){return !kind;})){rejectFile(T('unsupported_file'));return;}
+  if(files.some(function(file){return !file.size;})){rejectFile(T('empty_file'));return;}
+  var videos=kinds.filter(function(kind){return kind==='video';}).length;
+  if(videos&&(files.length!==1||videos!==1)){rejectFile(T('mixed_media'));return;}
+  if(!videos&&files.length>4){rejectFile(T('too_many_images'));return;}
+  if(!videos&&files.some(function(file){return file.size>8*1024*1024;})){rejectFile(T('image_large'));return;}
+  if(videos&&files[0].size>60*1024*1024){rejectFile(T('video_large'));return;}
+  var targets=files.map(normalizedFile);
+  if(videos){document.getElementById('imgnote').textContent=files[0].name;validateVideo(targets[0]).then(function(){if(request!==mediaVersion)return;blankQuestions();prepVideo(targets[0]);}).catch(function(e){if(request===mediaVersion)rejectFile(e.message||T('unsupported_file'));});return;}
+  var pr=document.getElementById('prep');pr.style.display='block';pr.className='busy';pr.textContent=T(files.length>1?'preparing_images':'preparing_image');document.getElementById('ask').disabled=true;
+  Promise.all(targets.map(localImageBlob)).then(function(blobs){return numberedPanel(blobs).then(function(panel){return {blobs:blobs,panel:panel};});}).then(function(result){if(request!==mediaVersion)return;
+    VID=null;clearVideoPreview();clearOwnImage();OWN_IMAGES=result.blobs.map(function(blob,index){return {blob:blob,id:null,name:files[index].name};});OWN_IMAGE_URL=URL.createObjectURL(result.panel);setUploadCost('pending');pr.style.display='none';pr.textContent='';document.getElementById('shot').src=OWN_IMAGE_URL;document.getElementById('imgnote').textContent=files.length>1?T('multi_note')(files.length):files[0].name;blankQuestions();document.getElementById('ask').disabled=false;})
    .catch(function(e){if(request===mediaVersion)rejectFile(e.message||T('unsupported_file'));});}
-document.getElementById('file').onchange=function(e){handleFile(e.target.files[0]);};
+document.getElementById('file').onchange=function(e){handleFiles(e.target.files);};
 var uploadZone=document.querySelector('.upload-zone');
 ['dragenter','dragover'].forEach(function(type){uploadZone.addEventListener(type,function(e){e.preventDefault();if(SERVICE_READY)uploadZone.classList.add('dragover');});});
 ['dragleave','drop'].forEach(function(type){uploadZone.addEventListener(type,function(e){e.preventDefault();uploadZone.classList.remove('dragover');});});
-uploadZone.addEventListener('drop',function(e){if(SERVICE_READY)handleFile(e.dataTransfer.files[0]);});
+uploadZone.addEventListener('drop',function(e){if(SERVICE_READY)handleFiles(e.dataTransfer.files);});
 function emptyResult(){return resultHead()+'<div class="result-empty"><div><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 9h32v30H8zM14 31l7-7 5 5 8-10M15 17h.01"/></svg><p data-i18n="result_empty">'+esc(T('result_empty'))+'</p></div></div>';}
 function resetWorkbench(){
   mediaVersion++;evalVersion++;if(activeTimer){clearInterval(activeTimer);activeTimer=null;}
@@ -298,35 +313,31 @@ function collect(){var qs=[];document.querySelectorAll('.q').forEach(function(d)
   return qs;}
 function resultHead(meta){return '<div class="result-head"><div><p class="eyebrow">03 / OUTPUT</p><h2>'+esc(T('results_h'))+'</h2></div>'+
   (meta?'<p class="muted result-meta">'+esc(meta)+'</p>':'')+'</div>';}
-function resolveAskImage(src){
-  if(VID)return Promise.resolve({video:VID});
-  if(cur!==null&&src.indexOf('/api/preset_img/')>=0)return Promise.resolve({preset:PRE[cur].id});
-  if(OWN_IMAGE_ID)return Promise.resolve({upload:OWN_IMAGE_ID});
-  if(!OWN_IMAGE_BLOB)return Promise.resolve(src);
-  var imageBlob=OWN_IMAGE_BLOB;
-  return fetch(apiUrl('/api/upload_image'),{method:'POST',headers:{'Content-Type':'image/jpeg'},body:imageBlob})
+function uploadInputImage(item){if(item.id)return Promise.resolve({upload:item.id});var blob=item.blob;
+  return fetch(apiUrl('/api/upload_image'),{method:'POST',headers:{'Content-Type':'image/jpeg'},body:blob})
    .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
-   .then(function(res){
-     if(!res.ok||!res.j.id)throw new Error(res.j.error||'image upload failed');
-     if(OWN_IMAGE_BLOB===imageBlob){OWN_IMAGE_ID=res.j.id;setUploadCost(null);}
-     return {upload:res.j.id};
-   });
+   .then(function(res){if(!res.ok||!res.j.id)throw new Error(res.j.error||'image upload failed');if(item.blob===blob)item.id=res.j.id;return {upload:res.j.id};});}
+function resolveAskMedia(src){
+  if(VID)return Promise.resolve({image:{video:VID}});
+  if(cur!==null&&src.indexOf('/api/preset_img/')>=0)return Promise.resolve({image:{preset:PRE[cur].id}});
+  if(!OWN_IMAGES.length)return Promise.resolve({image:src});
+  return Promise.all(OWN_IMAGES.map(uploadInputImage)).then(function(refs){setUploadCost(null);return refs.length===1?{image:refs[0]}:{images:refs};});
 }
 function ask(){
   var request=++evalVersion,qs=collect(),out=document.getElementById('out');
   if(!qs.length){out.innerHTML=resultHead()+'<div class="err">'+T('need_q')+'</div>';return;}
-  var body={questions:qs},src=document.getElementById('shot').src,needsUpload=!!(OWN_IMAGE_BLOB&&!OWN_IMAGE_ID);
+  var body={questions:qs},src=document.getElementById('shot').src,needsUpload=OWN_IMAGES.some(function(item){return !item.id;});
   document.getElementById('ask').disabled=true;out.innerHTML=resultHead()+'<div class="result-empty busy-state"><div><span class="result-loader"></span><p>'+esc(T(needsUpload?'uploading':'running'))+'</p></div></div>';
   var t0=performance.now(),tm=document.getElementById('timer');tm.className='timer';
   if(activeTimer)clearInterval(activeTimer);activeTimer=setInterval(function(){tm.textContent=((performance.now()-t0)/1000).toFixed(2)+' s';},33);
-  resolveAskImage(src).then(function(image){
+  resolveAskMedia(src).then(function(media){
    if(request!==evalVersion)return null;
-   body.image=image;
+   for(var key in media)body[key]=media[key];
    out.querySelector('.busy-state p').textContent=T('running');
    return fetch(apiUrl('/api/ask'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   }).then(function(r){if(!r)return null;return r.json().then(function(j){return {ok:r.ok,j:j};});})
    .then(function(res){if(!res||request!==evalVersion)return;clearInterval(activeTimer);activeTimer=null;document.getElementById('ask').disabled=false;
-     if(!res.ok){var error=res.j.error||'failed';if(error==='uploaded image is missing; upload it again'&&OWN_IMAGE_BLOB){OWN_IMAGE_ID=null;setUploadCost('pending');}tm.textContent='';out.innerHTML=resultHead()+'<div class="err">'+esc(error)+'</div>';return;}
+     if(!res.ok){var error=res.j.error||'failed';if(String(error).indexOf('uploaded image')>=0&&OWN_IMAGES.length){OWN_IMAGES.forEach(function(item){item.id=null;});setUploadCost('pending');}tm.textContent='';out.innerHTML=resultHead()+'<div class="err">'+esc(error)+'</div>';return;}
      var d=res.j;tm.className='timer done';tm.textContent=d.wall_s.toFixed(3)+' s';
      var h=resultHead(T('res_head')(d.n_questions,(1000*d.wall_s).toFixed(0),(performance.now()-t0).toFixed(0)))+'<div class="answer-grid">';
      d.answers.forEach(function(a){
@@ -344,7 +355,7 @@ function ask(){
        h+='</div>';});
      h+='</div><p class="muted result-tip">'+T('tip')+'</p>';
      out.innerHTML=h;})
-   .catch(function(e){if(request!==evalVersion)return;if(OWN_IMAGE_BLOB&&!OWN_IMAGE_ID)setUploadCost('pending');clearInterval(activeTimer);activeTimer=null;document.getElementById('ask').disabled=false;
+   .catch(function(e){if(request!==evalVersion)return;if(OWN_IMAGES.some(function(item){return !item.id;}))setUploadCost('pending');clearInterval(activeTimer);activeTimer=null;document.getElementById('ask').disabled=false;
      out.innerHTML=resultHead()+'<div class="err">'+esc(e)+'</div>';});}
 setLang(LANG);loadLists();
 </script><script>
